@@ -1,4 +1,4 @@
-import { FETCH_ORANGES, DROP_IN_DISH, DROP_IN_BASKET, NEW_DAY } from '../constants/ActionTypes';
+import { FETCH_ORANGES, DROP_IN_DISH, DROP_IN_BASKET } from '../constants/ActionTypes';
 
 const initialState = {
   box: 7,
@@ -23,9 +23,6 @@ export default function oranges(state=initialState, action) {
             dish: state.dish,
             basket: state.basket + 1
           }
-        case NEW_DAY:
-        default:
-            return state;
     }
     return state;
 }

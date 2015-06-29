@@ -31,9 +31,6 @@ export default class Container extends Component {
 
   render() {
     const { dispatch } = this.props;
-
-    console.log("DISPATCH", dispatch);
-
     const orangeActions = bindActionCreators(OrangeActions, dispatch);
 
     return <div style={styles.container}>
@@ -45,7 +42,6 @@ export default class Container extends Component {
       <div style={styles.row}>
           <Stats actions={orangeActions} />
       </div>
-        <Controls actions={orangeActions} />
     </div>;
   }
 }
