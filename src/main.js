@@ -6,7 +6,7 @@ import { createRedux } from 'redux';
 import * as stores from './stores';
 
 const redux = createRedux(stores);
-var mountNode = document.getElementById("root");
+const mountNode = document.getElementById("root");
 
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
     React.render(

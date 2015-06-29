@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react/addons';
 import DraggableOrange from './DraggableOrange';
 import { verticalCenter } from '../styles/Themes';
+import { connect } from 'redux/react';
 
 const styles = {
     box: {
@@ -11,6 +12,9 @@ const styles = {
     }
 };
 
+@connect(state => ({
+    oranges: state.oranges.box
+}))
 export default class OrangeBox extends Component {
   static propTypes = {
       oranges: PropTypes.number.isRequired,
@@ -18,10 +22,7 @@ export default class OrangeBox extends Component {
   };
 
   render() {
-    const { oranges } = this.props;
-
-    console.log("Render", oranges);
-
+    const { actions, oranges } = this.props;
     return <div style={styles.box}>
         {
             Array.apply(0, Array(oranges)).map((x, i) => {

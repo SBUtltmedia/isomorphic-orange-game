@@ -24,20 +24,19 @@ const styles = {
 }
 
 @connect(state => ({
-    oranges: state.oranges
+    state: state
 }))
 @DragDropContext(HTML5Backend)
 export default class Container extends Component {
-  static propTypes = {
-      oranges: PropTypes.object.isRequired
-  };
 
   render() {
     const { dispatch } = this.props;
+
+    console.log("DISPATCH", dispatch);
+
     const orangeActions = bindActionCreators(OrangeActions, dispatch);
 
     return <div style={styles.container}>
-      {/*
       <div style={styles.row}>
           <Basket actions={orangeActions} />
           <Controls actions={orangeActions} />
@@ -46,7 +45,6 @@ export default class Container extends Component {
       <div style={styles.row}>
           <Stats actions={orangeActions} />
       </div>
-      */}
         <Controls actions={orangeActions} />
     </div>;
   }

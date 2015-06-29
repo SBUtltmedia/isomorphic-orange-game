@@ -1,27 +1,27 @@
 import { FETCH_ORANGES, DROP_IN_DISH, DROP_IN_BASKET, NEW_DAY } from '../constants/ActionTypes';
 
 const initialState = {
-  oranges: 7,
-  basketOranges: 0,
-  dishOranges: 0
+  box: 7,
+  basket: 0,
+  dish: 0
 };
 
 export default function oranges(state=initialState, action) {
     switch (action.type) {
         case FETCH_ORANGES:
-            console.log(action);
+            console.log("Action", action);
             return action.oranges;
         case DROP_IN_DISH:
             return {
-                oranges: state.oranges - 1,
-                dishOranges: state.dishOranges + 1,
-                basketOranges: state.basketOranges
+                box: state.box - 1,
+                dish: state.dish + 1,
+                basket: state.basket
             }
         case DROP_IN_BASKET:
           return {
-              oranges: state.oranges - 1,
-              dishOranges: state.dishOranges,
-              basketOranges: state.basketOranges + 1
+            box: state.box - 1,
+            dish: state.dish,
+            basket: state.basket + 1
           }
         case NEW_DAY:
         default:
