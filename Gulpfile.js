@@ -2,13 +2,12 @@ var gulp        = require('gulp'),
     browserify  = require('browserify'),
     sass        = require('gulp-sass'),
     sourcemaps  = require('gulp-sourcemaps'),
-    babel       = require('gulp-babel'),
     babelify    = require('babelify'),
     copy        = require('gulp-copy'),
     server      = require('gulp-develop-server'),
     clean       = require('gulp-rimraf'),
     plumber     = require('gulp-plumber'),
-    source      = require('vinyl-source-stream'),
+    source      = require('vinyl-source-stream')
     //livereload  = require('gulp-livereload');
 
 var paths = {
@@ -18,11 +17,7 @@ var paths = {
     main_client_script: 'src/main.js',
     main_sass: 'src/styles/main.scss',
     server_file: 'server.js',
-    server_path: 'server/',
-    build_path: 'build/',
-    scripts_build_path: 'build/src/',
-    server_build_path: 'build/server/',
-    public_path: 'build/server/public/'
+    build_path: 'build/'
 };
 
 gulp.task('client:browserify', function () {
@@ -33,42 +28,30 @@ gulp.task('client:browserify', function () {
     .bundle()
     .pipe(plumber())
     .pipe(source('main.js'))
-    .pipe(gulp.dest(paths.public_path));
-});
-
-gulp.task('server:babel', ['client:browserify', 'sass', 'views:copy', 'images:copy'], function () {
-    gulp.src(paths.scripts)
-        .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
-        .pipe(babel({ stage: 0, optional: ["runtime"] }))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(paths.scripts_build_path));
-
-    return gulp.src(paths.server_path + "**/*.js")
-        .pipe(babel({ stage: 0, optional: ["runtime"] }))
-        .pipe(gulp.dest(paths.server_build_path));
+    .pipe(gulp.dest(paths.build_path));
 });
 
 gulp.task('sass', function () {
     return gulp.src([paths.main_sass])
         .pipe(sass())
-        .pipe(gulp.dest(paths.public_path));
-});
-
-gulp.task('views:copy', function() {
-    return gulp.src('server/views/index.ejs')
-        .pipe(copy(paths.build_path));
+        .pipe(gulp.dest(paths.build_path));
 });
 
 gulp.task('images:copy', function() {
     return gulp.src('images/**')
-        .pipe(copy(paths.public_path));
+        .pipe(copy(paths.build_path));
 });
 
-gulp.task('server:run', ['server:babel'], function() {
-    server.listen( { path: paths.server_build_path + paths.server_file } );
+gulp.task('html:copy', function() {
+    return gulp.src('index.html')
+        .pipe(copy(paths.build_path));
 });
 
-gulp.task('server:restart', ['server:babel'], function() {
+gulp.task('server:run', ['client:browserify', 'sass', 'html:copy', 'images:copy'], function() {
+    server.listen( { path: paths.server_file } );
+});
+
+gulp.task('server:restart', ['client:browserify', 'sass', 'html:copy', 'images:copy'], function() {
     server.restart();
     //livereload();
 });
@@ -83,6 +66,6 @@ gulp.task('default', ['clean'], function() {
 
 gulp.task('watch', ['default'], function () {
     //livereload.listen();
-    gulp.watch([paths.scripts, paths.server_path + "**/*.js"], ['server:restart']);
+    gulp.watch([paths.scripts], ['server:restart']);
     gulp.watch(paths.sass, ['sass']);
 });
